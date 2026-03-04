@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0b0c10">
+<title>CITAACC Business Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #0b0c10;
+  --s1:      #12141a;
+  --s2:      #1a1c24;
+  --s3:      #22252f;
+  --border:  rgba(255,255,255,0.07);
+  --text:    #eceef5;
+  --muted:   #5a5d70;
+  --muted2:  #8a8da0;
+  --gold:    #c9a84c;
+  --gold2:   #f0d080;
+  --teal:    #2dd4bf;
+  --rose:    #fb7185;
+  --sky:     #38bdf8;
+  --violet:  #a78bfa;
+  --green:   #4ade80;
+  --safe:    env(safe-area-inset-bottom, 0px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  max-width:430px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+@media(min-width:430px){
+  body{border-left:1px solid var(--border);border-right:1px solid var(--border);box-shadow:0 0 100px rgba(0,0,0,.9)}
+}
+
+/* ── STATUS BAR ── */
+.status{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 4px;flex-shrink:0}
+.status-time{font-size:.82rem;font-weight:700;color:var(--text)}
+.status-icons{display:flex;gap:5px;align-items:center;color:var(--muted2)}
+
+/* ── HEADER ── */
+.app-header{
+  padding:8px 18px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+.logo-area{display:flex;align-items:center;gap:10px}
+.logo-emblem{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,#7c5c1a,#c9a84c);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:900;color:#fff;
+  font-family:'Playfair Display',serif;
+  flex-shrink:0;
+}
+.logo-text{line-height:1.1}
+.logo-title{font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;color:var(--gold)}
+.logo-sub{font-size:.6rem;color:var(--muted2);letter-spacing:.5px;text-transform:uppercase}
+.header-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--s2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted2);cursor:pointer;position:relative;flex-shrink:0;
+}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--rose);border-radius:50%;border:1.5px solid var(--bg)}
+
+/* ── SEARCH ── */
+.search-bar{
+  padding:10px 16px 8px;flex-shrink:0;
+}
+.search-inner{
+  display:flex;align-items:center;gap:9px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:13px;padding:10px 14px;
+  transition:border-color .2s;
+}
+.search-inner:focus-within{border-color:rgba(201,168,76,.35)}
+.search-inner svg{color:var(--muted);flex-shrink:0}
+.search-inner input{
+  background:none;border:none;outline:none;
+  color:var(--text);font-family:'Outfit',sans-serif;font-size:.88rem;width:100%;
+}
+.search-inner input::placeholder{color:var(--muted)}
+.search-clear{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  padding:2px;display:none;font-size:1.1rem;line-height:1;
+}
+.search-clear.show{display:block}
+
+/* ── SCROLL ── */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.scroll-area::-webkit-scrollbar{display:none}
+
+/* ── SCREENS ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  display:flex;background:var(--s1);
+  border-top:1px solid var(--border);
+  padding:8px 0 calc(8px + var(--safe));
+  flex-shrink:0;
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  cursor:pointer;padding:4px 0;
+}
+.nav-icon{
+  width:42px;height:30px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.nav-item.active .nav-icon{background:rgba(201,168,76,.12)}
+.nav-item.active .nav-icon svg{color:var(--gold)}
+.nav-item svg{color:var(--muted);transition:color .2s}
+.nav-label{font-size:.6rem;font-weight:600;color:var(--muted);letter-spacing:.3px;transition:color .2s}
+.nav-item.active .nav-label{color:var(--gold)}
+
+/* ──────────────────────────────────────────
+   HOME SCREEN
+────────────────────────────────────────── */
+.home-hero{
+  margin:12px 16px;
+  border-radius:20px;
+  padding:24px 22px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#1a1408 0%,#0f1a14 60%,#0c1020 100%);
+  border:1px solid rgba(201,168,76,.2);
+}
+.home-hero::before{
+  content:'';position:absolute;top:-50px;right:-40px;
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(201,168,76,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.home-hero::after{
+  content:'';position:absolute;bottom:-40px;left:10px;
+  width:120px;height:120px;
+  background:radial-gradient(circle,rgba(45,212,191,.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{font-size:.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;position:relative;z-index:1}
+.hero-heading{
+  font-family:'Playfair Display',serif;
+  font-size:1.7rem;line-height:1.1;font-weight:900;
+  color:var(--text);margin-bottom:6px;position:relative;z-index:1;
+}
+.hero-heading span{color:var(--gold)}
+.hero-desc{font-size:.72rem;color:var(--muted2);margin-bottom:18px;position:relative;z-index:1;line-height:1.5}
+.hero-stats{display:flex;gap:18px;position:relative;z-index:1}
+.hstat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1}
+.hstat-lbl{font-size:.62rem;color:var(--muted2);margin-top:2px;letter-spacing:.3px}
+
+/* CHIPS */
+.chips-row{
+  display:flex;gap:8px;padding:4px 16px 10px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.chips-row::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;display:flex;align-items:center;gap:7px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:14px;padding:10px 14px;min-width:130px;
+  cursor:pointer;transition:all .18s;
+}
+.chip:active{transform:scale(.97);background:var(--s3)}
+.chip-ico{font-size:1.2rem}
+.chip-info{}
+.chip-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;line-height:1}
+.chip-lbl{font-size:.62rem;color:var(--muted2);margin-top:1px}
+
+/* SECTION HEAD */
+.sec-h{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px 8px;
+}
+.sec-title{font-size:.82rem;font-weight:700;letter-spacing:.3px}
+.sec-more{font-size:.72rem;color:var(--gold);font-weight:600;cursor:pointer}
+
+/* HSCROLL */
+.hscroll{
+  display:flex;gap:11px;padding:0 16px 4px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+}
+.hscroll::-webkit-scrollbar{display:none}
+
+/* MEET CARDS (horizontal) */
+.meet-card{
+  flex-shrink:0;scroll-snap-align:start;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:16px;padding:16px;width:190px;
+  cursor:pointer;transition:all .18s;
+  position:relative;overflow:hidden;
+}
+.meet-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+.meet-card:active{transform:scale(.97);background:var(--s3)}
+.mc-batch{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.mc-name{font-weight:700;font-size:.9rem;margin-bottom:3px;line-height:1.2}
+.mc-company{font-size:.7rem;color:var(--muted2);line-height:1.3}
+
+/* CITY PILLS */
+.city-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}
+.city-pill{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:13px;padding:12px 14px;
+  cursor:pointer;transition:all .18s;
+}
+.city-pill:active{transform:scale(.97);background:var(--s3)}
+.cp-city{font-weight:700;font-size:.85rem;margin-bottom:2px}
+.cp-count{font-size:.7rem;color:var(--muted2)}
+.cp-dot{width:8px;height:8px;border-radius:50%;margin-bottom:6px}
+
+/* ──────────────────────────────────────────
+   DIRECTORY SCREEN
+────────────────────────────────────────── */
+.filter-bar{
+  display:flex;gap:7px;padding:0 16px 10px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.filter-bar::-webkit-scrollbar{display:none}
+.fpill{
+  flex-shrink:0;padding:6px 13px;border-radius:100px;
+  font-size:.72rem;font-weight:600;background:var(--s2);
+  border:1px solid var(--border);color:var(--muted2);
+  cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;
+  white-space:nowrap;
+}
+.fpill.on{background:var(--gold);border-color:var(--gold);color:#111}
+
+/* MEMBER CARD */
+.member-list{padding:0 16px}
+.member-card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:15px;padding:13px 14px;margin-bottom:8px;
+  cursor:pointer;transition:all .17s;
+  animation:fadeUp .3s ease both;
+}
+.member-card:active{transform:scale(.985);background:var(--s2)}
+.member-card.met{
+  border-color:rgba(201,168,76,.25);
+  background:linear-gradient(135deg,var(--s1) 0%,rgba(201,168,76,.04) 100%);
+}
+.member-card.no-detail{opacity:.7}
+
+.avatar{
+  width:42px;height:42px;border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;
+  font-size:.9rem;flex-shrink:0;
+}
+.member-info{flex:1;min-width:0}
+.mi-name{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-company{font-size:.7rem;color:var(--muted2);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-city{font-size:.67rem;color:var(--muted);margin-top:1px}
+.member-badge{
+  font-size:.58rem;font-weight:700;padding:3px 8px;
+  border-radius:100px;letter-spacing:.4px;text-transform:uppercase;
+  flex-shrink:0;
+}
+
+/* ──────────────────────────────────────────
+   STATS SCREEN
+────────────────────────────────────────── */
+.stats-content{padding:0 16px 24px}
+.stat-card{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:16px;padding:20px;margin-bottom:12px;
+}
+.stat-card-title{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.stat-big{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:4px}
+.stat-sub{font-size:.75rem;color:var(--muted2)}
+.bar-list{}
+.bar-item{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:5px;color:var(--muted2)}
+.bar-label span:last-child{font-weight:700;color:var(--text)}
+.bar-track{height:7px;background:var(--s3);border-radius:100px;overflow:hidden}
+.bar-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sg-item{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:14px;padding:16px;
+  border-top:3px solid;
+}
+.sg-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.sg-lbl{font-size:.68rem;color:var(--muted2);line-height:1.4}
+
+/* DECADE ROW */
+.decade-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.decade-row::-webkit-scrollbar{display:none}
+.decade-chip{
+  flex-shrink:0;background:var(--s3);border:1px solid var(--border);
+  border-radius:11px;padding:10px 14px;text-align:center;min-width:90px;
+}
+.dc-decade{font-size:.62rem;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.dc-count{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900}
+
+/* ──────────────────────────────────────────
+   DETAIL OVERLAY
+────────────────────────────────────────── */
+.overlay{
+  position:fixed;inset:0;z-index:200;
+  display:none;flex-direction:column;
+  background:var(--bg);max-width:430px;margin:0 auto;
+}
+.overlay.open{display:flex;animation:slideUp .3s cubic-bezier(.4,0,.2,1) both}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.drag-handle{
+  width:36px;height:4px;background:rgba(255,255,255,.12);
+  border-radius:100px;margin:12px auto 0;flex-shrink:0;cursor:pointer;
+}
+.ov-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 50px}
+.ov-scroll::-webkit-scrollbar{display:none}
+
+.ov-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.ov-avatar{
+  width:60px;height:60px;border-radius:18px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:700;font-size:1.3rem;
+}
+.ov-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;line-height:1.2;margin-bottom:3px}
+.ov-role{font-size:.78rem;color:var(--muted2);margin-bottom:2px}
+.ov-company{font-size:.85rem;font-weight:600}
+
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.obadge{
+  font-size:.62rem;font-weight:700;padding:4px 10px;
+  border-radius:100px;letter-spacing:.5px;text-transform:uppercase;
+}
+.obadge.met   {background:rgba(201,168,76,.12);color:var(--gold)}
+.obadge.city  {background:rgba(56,189,248,.1); color:var(--sky)}
+.obadge.batch {background:rgba(167,139,250,.1);color:var(--violet)}
+.obadge.cat   {background:rgba(74,222,128,.1); color:var(--green)}
+
+.ov-sec-title{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.ov-row{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:11px 13px;background:var(--s2);border-radius:12px;
+  margin-bottom:6px;font-size:.82rem;
+}
+.ov-row svg{color:var(--gold);flex-shrink:0;margin-top:1px}
+.ov-row a{color:var(--sky);text-decoration:none}
+.ov-row a:hover{text-decoration:underline}
+
+.action-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:22px}
+.act-btn{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:13px;padding:13px 6px;cursor:pointer;transition:all .18s;
+}
+.act-btn:active{transform:scale(.94);background:var(--s3)}
+.act-btn svg{color:var(--gold)}
+.act-btn span{font-size:.65rem;color:var(--muted2);font-weight:600}
+
+/* MISC */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.spacer{height:20px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .emo{font-size:2.5rem;margin-bottom:12px}
+.empty p{font-size:.85rem}
+.results-count{font-size:.7rem;color:var(--muted);padding:4px 16px 8px;font-style:italic}
+</style>
+</head>
+<body>
+
+<!-- STATUS BAR -->
+<div class="status">
+  <span class="status-time" id="clk">9:41</span>
+  <div class="status-icons">
+    <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1" opacity=".3"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity=".5"/><rect x="9" y=".5" width="3" height="11.5" rx="1" opacity=".7"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+    <svg width="15" height="11" viewBox="0 0 24 18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1.5 6.5C5.5 2.5 10 .5 12 .5s6.5 2 10.5 6"/><path d="M4.5 9.5C7 7 9.5 5.5 12 5.5s5 1.5 7.5 4"/><path d="M7.5 12.5c1.5-1.5 3-2.5 4.5-2.5s3 1 4.5 2.5"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>
+    <svg width="24" height="11" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="18" height="8" rx="2" fill="currentColor"/><path d="M23.5 4v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".4"/></svg>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="logo-area">
+    <div class="logo-emblem">C</div>
+    <div class="logo-text">
+      <div class="logo-title">CITAACC</div>
+      <div class="logo-sub">Business Directory · 2026</div>
+    </div>
+  </div>
+  <div class="header-icon" onclick="showToast('3 new members registered!')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <div class="notif-dot"></div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="search-inner">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search name, company, city…" oninput="onSearch(this.value)">
+    <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+  </div>
+</div>
+
+<!-- SCROLL AREA -->
+<div class="scroll-area" id="scrollArea">
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="screen active" id="scr-home">
+
+  <div class="home-hero">
+    <div class="hero-eyebrow">CIT Alumni Association · Chennai Chapter</div>
+    <div class="hero-heading">Business<br><span>Directory</span></div>
+    <div class="hero-desc">Connecting CIT alumni across industries, cities and generations.</div>
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-num" style="color:var(--gold)">169</div>
+        <div class="hstat-lbl">Members</div>
+      </div>
+      <div>
+        <div class="hstat-num" style="color:var(--teal)">84</div>
+        <div class="hstat-lbl">Jan '26 Meet</div>
+      </div>
+      <div>
+        <div class="hstat-num" style="color:var(--rose)">25+</div>
+        <div class="hstat-lbl">Cities</div>
+      </div>
+      <div>
+        <div class="hstat-num" style="color:var(--violet)">60+</div>
+        <div class="hstat-lbl">Yrs Span</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK STATS -->
+  <div class="chips-row">
+    <div class="chip" onclick="goDir('met')">
+      <div class="chip-ico">🤝</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--gold)">84</div><div class="chip-lbl">Attended Meet</div></div>
+    </div>
+    <div class="chip" onclick="goDir('chennai')">
+      <div class="chip-ico">📍</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--teal)">63</div><div class="chip-lbl">Chennai</div></div>
+    </div>
+    <div class="chip" onclick="goDir('global')">
+      <div class="chip-ico">🌍</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--sky)">22</div><div class="chip-lbl">Global</div></div>
+    </div>
+    <div class="chip" onclick="goDir('ceo')">
+      <div class="chip-ico">👔</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--rose)">38</div><div class="chip-lbl">Founders/CEOs</div></div>
+    </div>
+  </div>
+
+  <!-- RECENT MEET -->
+  <div class="sec-h"><div class="sec-title">✨ Jan 2026 Meet Attendees</div><div class="sec-more" onclick="goDir('met')">See all</div></div>
+  <div class="hscroll" id="recentMeetCards"></div>
+
+  <!-- CITIES -->
+  <div class="sec-h"><div class="sec-title">🗺️ Members by City</div><div class="sec-more" onclick="switchTab('stats')">Details</div></div>
+  <div class="city-grid">
+    <div class="city-pill" onclick="goDir('chennai')">
+      <div class="cp-dot" style="background:var(--gold)"></div>
+      <div class="cp-city">Chennai</div>
+      <div class="cp-count">63 members</div>
+    </div>
+    <div class="city-pill" onclick="goDir('coimbatore')">
+      <div class="cp-dot" style="background:var(--teal)"></div>
+      <div class="cp-city">Coimbatore</div>
+      <div class="cp-count">16 members</div>
+    </div>
+    <div class="city-pill" onclick="goDir('bangalore')">
+      <div class="cp-dot" style="background:var(--violet)"></div>
+      <div class="cp-city">Bangalore</div>
+      <div class="cp-count">10 members</div>
+    </div>
+    <div class="city-pill" onclick="goDir('global')">
+      <div class="cp-dot" style="background:var(--rose)"></div>
+      <div class="cp-city">International</div>
+      <div class="cp-count">22 members</div>
+    </div>
+  </div>
+
+  <!-- CATEGORY -->
+  <div class="sec-h"><div class="sec-title">💼 By Category</div><div class="sec-more" onclick="switchTab('stats')">Details</div></div>
+  <div class="hscroll" style="margin-bottom:20px">
+    <div class="chip" onclick="goDir('owner')">
+      <div class="chip-ico">🚀</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--rose)">41</div><div class="chip-lbl">Business Owners</div></div>
+    </div>
+    <div class="chip" onclick="goDir('senior')">
+      <div class="chip-ico">📊</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--sky)">47</div><div class="chip-lbl">Senior Mgmt</div></div>
+    </div>
+    <div class="chip" onclick="goDir('ceo')">
+      <div class="chip-ico">🏆</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--gold)">28</div><div class="chip-lbl">CEO / CXO</div></div>
+    </div>
+    <div class="chip" onclick="goDir('junior')">
+      <div class="chip-ico">🌱</div>
+      <div class="chip-info"><div class="chip-val" style="color:var(--green)">9</div><div class="chip-lbl">Junior / Other</div></div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+</div>
+
+<!-- ═══════════════ DIRECTORY ═══════════════ -->
+<div class="screen" id="scr-dir">
+  <div class="filter-bar" id="dirFilters">
+    <div class="fpill on" onclick="filterDir('all',this)">All (169)</div>
+    <div class="fpill" onclick="filterDir('met',this)">✅ Jan Meet (84)</div>
+    <div class="fpill" onclick="filterDir('chennai',this)">📍 Chennai</div>
+    <div class="fpill" onclick="filterDir('coimbatore',this)">Coimbatore</div>
+    <div class="fpill" onclick="filterDir('bangalore',this)">Bangalore</div>
+    <div class="fpill" onclick="filterDir('global',this)">🌍 Global</div>
+    <div class="fpill" onclick="filterDir('ceo',this)">CEO/CXO</div>
+    <div class="fpill" onclick="filterDir('owner',this)">Founders</div>
+    <div class="fpill" onclick="filterDir('senior',this)">Senior Mgmt</div>
+    <div class="fpill" onclick="filterDir('1960s',this)">1960s</div>
+    <div class="fpill" onclick="filterDir('1970s',this)">1970s</div>
+    <div class="fpill" onclick="filterDir('1980s',this)">1980s</div>
+    <div class="fpill" onclick="filterDir('1990s',this)">1990s</div>
+    <div class="fpill" onclick="filterDir('2000s',this)">2000s</div>
+    <div class="fpill" onclick="filterDir('2010s',this)">2010s</div>
+  </div>
+  <div class="results-count" id="dirCount"></div>
+  <div class="member-list" id="memberList"></div>
+</div>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<div class="screen" id="scr-stats">
+  <div class="stats-content">
+
+    <div class="sec-h" style="padding:16px 0 10px"><div class="sec-title" style="font-size:.9rem">📊 Directory Statistics</div></div>
+
+    <div class="stat-grid">
+      <div class="sg-item" style="border-top-color:var(--gold)">
+        <div class="sg-num" style="color:var(--gold)">169</div>
+        <div class="sg-lbl">Total registered members</div>
+      </div>
+      <div class="sg-item" style="border-top-color:var(--teal)">
+        <div class="sg-num" style="color:var(--teal)">84</div>
+        <div class="sg-lbl">Attended Jan '26 meet</div>
+      </div>
+      <div class="sg-item" style="border-top-color:var(--rose)">
+        <div class="sg-num" style="color:var(--rose)">85</div>
+        <div class="sg-lbl">Registered, did not attend</div>
+      </div>
+      <div class="sg-item" style="border-top-color:var(--violet)">
+        <div class="sg-num" style="color:var(--violet)">50%</div>
+        <div class="sg-lbl">Meet attendance rate</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-title">Top Cities</div>
+      <div class="bar-list">
+        <div class="bar-item"><div class="bar-label"><span>Chennai</span><span>63</span></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--gold)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Coimbatore</span><span>16</span></div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--teal)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Bangalore</span><span>10</span></div><div class="bar-track"><div class="bar-fill" style="width:16%;background:var(--violet)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>USA</span><span>8</span></div><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--sky)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Hyderabad</span><span>4</span></div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--rose)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Dubai / UAE</span><span>4</span></div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--green)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Other India</span><span>32</span></div><div class="bar-track"><div class="bar-fill" style="width:51%;background:var(--muted)"></div></div></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-title">Member Category</div>
+      <div class="bar-list">
+        <div class="bar-item"><div class="bar-label"><span>Business Owner / Entrepreneur</span><span>41</span></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--rose)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Senior Management</span><span>47</span></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--sky)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>CEO</span><span>12</span></div><div class="bar-track"><div class="bar-fill" style="width:29%;background:var(--gold)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>CXO (CTO/CFO/COO etc.)</span><span>16</span></div><div class="bar-track"><div class="bar-fill" style="width:39%;background:var(--violet)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Junior Management</span><span>4</span></div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--green)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>No info / Others</span><span>49</span></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--muted)"></div></div></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-title">Passing Year Decades</div>
+      <div class="decade-row">
+        <div class="decade-chip"><div class="dc-decade">1960s</div><div class="dc-count" style="color:var(--gold)">3</div></div>
+        <div class="decade-chip"><div class="dc-decade">1970s</div><div class="dc-count" style="color:var(--teal)">8</div></div>
+        <div class="decade-chip"><div class="dc-decade">1980s</div><div class="dc-count" style="color:var(--violet)">28</div></div>
+        <div class="decade-chip"><div class="dc-decade">1990s</div><div class="dc-count" style="color:var(--rose)">83</div></div>
+        <div class="decade-chip"><div class="dc-decade">2000s</div><div class="dc-count" style="color:var(--sky)">22</div></div>
+        <div class="decade-chip"><div class="dc-decade">2010s+</div><div class="dc-count" style="color:var(--green)">14</div></div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card-title">Top Industries</div>
+      <div class="bar-list">
+        <div class="bar-item"><div class="bar-label"><span>IT / Software / AI</span><span>38</span></div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--sky)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Manufacturing / Engineering</span><span>29</span></div><div class="bar-track"><div class="bar-fill" style="width:76%;background:var(--gold)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Consulting / Advisory</span><span>18</span></div><div class="bar-track"><div class="bar-fill" style="width:47%;background:var(--violet)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Real Estate / Construction</span><span>11</span></div><div class="bar-track"><div class="bar-fill" style="width:29%;background:var(--teal)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Finance / Investment</span><span>9</span></div><div class="bar-track"><div class="bar-fill" style="width:24%;background:var(--green)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Education / Healthcare</span><span>8</span></div><div class="bar-track"><div class="bar-fill" style="width:21%;background:var(--rose)"></div></div></div>
+        <div class="bar-item"><div class="bar-label"><span>Other / Govt</span><span>16</span></div><div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--muted)"></div></div></div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div>
+
+</div><!-- /scroll-area -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+    <div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="nav-label">Home</div>
+  </div>
+  <div class="nav-item" id="nav-dir" onclick="switchTab('dir')">
+    <div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="nav-label">Directory</div>
+  </div>
+  <div class="nav-item" id="nav-stats" onclick="switchTab('stats')">
+    <div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+    <div class="nav-label">Stats</div>
+  </div>
+</nav>
+
+<!-- DETAIL OVERLAY -->
+<div class="overlay" id="detailOverlay">
+  <div class="drag-handle" onclick="closeOverlay()"></div>
+  <div class="ov-scroll" id="overlayContent"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s3);color:var(--text);padding:10px 18px;border-radius:100px;font-size:.78rem;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;max-width:320px;text-align:center;border:1px solid var(--border)"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA — 169 members
+// ═══════════════════════════════════════════════
+const MEMBERS = [
+  {n:"Subramanian",y:"1978",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Saravanaraja",y:"1988",r:"Managing Director",c:"AI Expert Works - A Creative Studio",city:"Chennai",m:"+919884258266",e:"saravanarajaomalur@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:"",web:"www.aiexpertworks.ai"},
+  {n:"Velusamy",y:"1987",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Karthik Swaminathan",y:"1999",r:"Senior Delivery Manager",c:"Tata Consultancy Services",city:"Chennai",m:"+919600071313",e:"ksn1312@gmail.com",cat:"Senior Management",met:true,li:"https://www.linkedin.com/in/ksn1312"},
+  {n:"Dhandapani",y:"",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Krishnamurthy TN",y:"",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Mariyappan",y:"1996",r:"Product Management Director",c:"Oracle India",city:"Hyderabad",m:"+919100447625",e:"a_mariyappan@yahoo.com",cat:"",met:true,li:"https://www.linkedin.com/in/oramari/"},
+  {n:"Haribabu",y:"1990",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Sridharan Balaiyan",y:"1990",r:"Director Sourcing",c:"Barry-Wehmiller International Pvt Limited",city:"Chennai",m:"+919840987440",e:"sridharanbalaiyan@gmail.com",cat:"Senior Management",met:true,li:"https://www.linkedin.com/in/sridharan-balaiyan-5a65b310/",web:"barrywehmiller.com"},
+  {n:"Karthikeyan SP",y:"1986",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"M.S.Deivandran",y:"1982",r:"Chairman & Managing Director",c:"Swiss Garnier Group of Companies",city:"Chennai",m:"9884075967",e:"cmd@swissgarnier.com",cat:"CEO",met:true,li:"",web:"www.swissgarnier.com"},
+  {n:"Karnan Ramamurthy",y:"1996",r:"Partner",c:"Vedic Homes",city:"Chennai",m:"+919840246995",e:"rkarnan@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Raj Arun",y:"1996",r:"Managing Partner",c:"Vedic Homes",city:"Chennai",m:"+919840111511",e:"srajarun@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Venkatesh B",y:"2016",r:"Assistant Manager",c:"Mahindra & Mahindra",city:"",m:"78453477793",e:"balavenkatesh12@gmail.com",cat:"",met:true,li:""},
+  {n:"Natarajan S",y:"1988",r:"General Manager QAC",c:"Data Patterns India Ltd.",city:"Chennai",m:"+919790976816",e:"natarajans66@gmail.com",cat:"Senior Management",met:true,li:"",web:"www.datapatternsindia.com"},
+  {n:"M Ramesh",y:"1983",r:"Executive Vice President",c:"TMI Network",city:"Chennai",m:"+917708049088",e:"mr@tminetwork.com",cat:"Senior Management",met:true,li:""},
+  {n:"Thaliravan",y:"2005",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Pooja Prakash",y:"1998",r:"Music Teacher",c:"Dhwani Music Class",city:"Chennai",m:"+919840205230",e:"pooja1978.prakash@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Muthukumar",y:"1995",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Bharath Selvan Sukumaran",y:"1999",r:"Principal Consultant",c:"Infosys Limited",city:"Chennai",m:"+919840044209",e:"sbselvan@yahoo.com",cat:"Senior Management",met:true,li:"https://www.linkedin.com/in/bharath-selvan-sukumaran-a187476"},
+  {n:"V T Moorthy",y:"1962",r:"CEO / Advisor",c:"Aditya Birla Group (Retired) | Tanfac, Hindalco",city:"Chennai",m:"+919092024442",e:"vtmoorthy41@gmail.com",cat:"CEO",met:true,li:""},
+  {n:"AshokRaj Vadivelu",y:"1993",r:"Co-Founder / CEO",c:"Intelizest",city:"Chennai",m:"+919884465595",e:"ashokrajvadivelu@gmail.com",cat:"CEO",met:true,li:""},
+  {n:"K Dillibabu",y:"2001",r:"Senior Manager – Global Sourcing",c:"ESAB India Ltd",city:"Chennai",m:"+919940402299",e:"k.dillibabu@gmail.com",cat:"Senior Management",met:true,li:"https://www.linkedin.com/in/dillibabu-k-68904739",web:"esab.com"},
+  {n:"Sriram",y:"1984",r:"",c:"SK Consultants",city:"Chennai",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Kalillur Rahaman",y:"1996",r:"Management Consultant / GCC Advisor",c:"Independent Consultant",city:"Chennai",m:"+919884416105",e:"rahman.kalilur@outlook.com",cat:"",met:true,li:""},
+  {n:"Arul S",y:"1984",r:"Country Head – Machinery",c:"Kobelco Industrial Machinery India",city:"Chennai",m:"",e:"",cat:"",met:true,li:"",web:"www.kimi.co.in"},
+  {n:"Alagar",y:"1982",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Ramasevanam",y:"1985",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Mahendran",y:"1992",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Nadhiya",y:"2016",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"S Karthikeyan",y:"1998",r:"Business Head – Off Highway Tyres",c:"TVS Srichakra Ltd",city:"Chennai",m:"",e:"",cat:"Senior Management",met:true,li:"",web:"www.tvseurogrip.com"},
+  {n:"Babu RS",y:"1987",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"S. Kandavel",y:"1978",r:"Managing Partner",c:"Texspa Engineers",city:"Chennai",m:"+919444053385",e:"texspa@hotmail.com",cat:"",met:true,li:""},
+  {n:"Rajamanikam",y:"1963",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Rajendran Govindasamy",y:"1995",r:"",c:"Phorotech Surfin (India) Pvt Ltd",city:"Chennai",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Senthilkumaran",y:"1984",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Gandhirajan",y:"1994",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Rajkumar Suriyaprakash",y:"1987",r:"Director",c:"IEC Fabchem / Primetech / IEC Hydrogen Frontiers",city:"Chennai",m:"+919840088220",e:"rajkumar@iecfabchem.in",cat:"Senior Management",met:true,li:"",web:"www.iecfabchem.in"},
+  {n:"Sagaya Louis",y:"1987",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Kamban S",y:"1978",r:"Director",c:"Aquatherm Engineering Consultants",city:"Chennai",m:"+919444019540",e:"s.kamban@aquatherm.in",cat:"Senior Management",met:true,li:""},
+  {n:"Balamurugan",y:"1985",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Soundara Pandiyan",y:"1994",r:"",c:"TNEB",city:"Chennai",m:"",e:"",cat:"Senior Management",met:true,li:""},
+  {n:"Sankaranand",y:"1993",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Sakthivelu",y:"1990",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Dhanasekar B",y:"2005",r:"",c:"DTCC",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Senthil",y:"2005",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Ganesalingam J",y:"1993",r:"Zonal Head – Andhra Pradesh",c:"Casagrand Premier Builder Ltd",city:"Chennai",m:"+919384877229",e:"ganesalingam@casagrand.co.in",cat:"Senior Management",met:true,li:"",web:"www.casagrand.co.in"},
+  {n:"Arunkumar",y:"1993",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Thanakarthik Kumar",y:"2005",r:"",c:"Sustainabyte Technologies Pvt Ltd",city:"Chennai",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Raja V",y:"",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Vijay Kulandaivel",y:"1999",r:"Managing Director",c:"Genergy Building Systems / Curry Box Restaurants",city:"Chennai",m:"+919629743939",e:"genergy.bs@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Rajkumar Y",y:"1999",r:"Chief Operating Officer",c:"TIPS Globeducate",city:"Chennai",m:"+919840976497",e:"y.rajkumar@ind.globeducate.com",cat:"Senior Management",met:true,li:"",web:"tipsglobeducate.com"},
+  {n:"Suresh PN",y:"1985",r:"Consultant – MFD, SIF, PMS, AIF",c:"PNS Investment Fin Services",city:"Chennai",m:"9444018040",e:"pnsuresh2020@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:"",web:"pnsinvestment.com"},
+  {n:"Ganeshan",y:"2009",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Elango",y:"1988",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"S.M.K. Arul",y:"1996",r:"Managing Partner",c:"The Elite Traders",city:"Chennai",m:"+919444491343",e:"ARUL@POWERTECHCONTROLS.CO.IN",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Thineshkumar",y:"1990",r:"Managing Director",c:"Hexxon Maritime Services",city:"Chennai",m:"+919894649320",e:"thinesh@hexxon.in",cat:"",met:true,li:""},
+  {n:"Rajendran Manickavasagam",y:"1979",r:"Managing Director",c:"Kaavian Systems Private Limited",city:"Chennai",m:"9840286855",e:"rajenmds@gmail.com",cat:"",met:true,li:""},
+  {n:"Viswanathan S",y:"1979",r:"Port Consultant & Life Insurance",c:"Independent",city:"Chennai",m:"7447752276",e:"visna1961@gmail.com",cat:"",met:true,li:""},
+  {n:"Udayasankar",y:"1999",r:"CEO",c:"Microspares",city:"Chennai",m:"+919444754625",e:"Udaya.sankar@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:"https://www.linkedin.com/in/udaya-sankar-a6457536",web:"www.micro-spares.com"},
+  {n:"Venkatesh Baskardoss",y:"1999",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Sudharsan Srinivasan",y:"1996",r:"Co-Founder & Chief Digital Officer",c:"nStore Retech Private Limited",city:"",m:"9791159426",e:"srisud@gmail.com",cat:"",met:true,li:""},
+  {n:"Amrithanathan N",y:"1992",r:"Co-Founder cum Director",c:"Eishaa Communication Systems Pvt Ltd",city:"Chennai",m:"+919962518971",e:"amrithanathann@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Paul Naveen Raj J",y:"2001",r:"Principal Cybersecurity Architect",c:"Cognizant Technology Solutions",city:"",m:"8220007731",e:"Paulnaveenraj@gmail.com",cat:"",met:true,li:""},
+  {n:"Devisree E",y:"2002",r:"Enterprise Portfolio Lead",c:"Cognizant",city:"",m:"8220007732",e:"devisreenaveen@gmail.com",cat:"",met:true,li:""},
+  {n:"Anitha",y:"",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Mu Venkatesen",y:"1989",r:"Head",c:"Solution 2 Digital Technology",city:"Chennai",m:"+919500045925",e:"sales@solution2digital.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Margabandu",y:"1981",r:"Director",c:"Ashwini Eye Care & Arvind Opticals",city:"Chennai",m:"9444051468",e:"ashwinieyecarehospital@yahoo.in",cat:"",met:true,li:"",web:"www.ashwinieyecarehospital.com"},
+  {n:"Muniyandi M",y:"1980",r:"MEP Consultant & Detail Engineer",c:"OhmTech Services",city:"Chennai",m:"+919444166085",e:"muniots@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:""},
+  {n:"Sudha Ganesh",y:"1999",r:"Chief Transformation Officer",c:"Kanini Software Solutions",city:"Chennai",m:"+919500001825",e:"Sudhaganesh43@gmail.com",cat:"CXO (CTO / CFO / COO / CMO, etc.)",met:true,li:""},
+  {n:"Angusamy V",y:"1992",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Murugananthan",y:"1988",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Rajvaradarajan",y:"",r:"Managing Director",c:"K Dhandapani & Company",city:"Chennai",m:"99403 12330",e:"kdltrd@gmail.com",cat:"",met:true,li:""},
+  {n:"Murugan S",y:"1988",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Alagiri Srinivasan",y:"1998",r:"COO",c:"Celcom Solutions Global Pvt Ltd",city:"",m:"9840850593",e:"alagiri.s28@gmail.com",cat:"",met:true,li:""},
+  {n:"Niranjan",y:"2016",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Venkatasubharao",y:"1993",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Senthilkannan",y:"1992",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Raviramasamy",y:"1980",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Manoharan Sakthivel",y:"1994",r:"Managing Director",c:"Flowtech Engineers",city:"Chennai",m:"+919444410273",e:"manoharansakthivel@flowtech.in",cat:"",met:true,li:"",web:"www.flowtech.in"},
+  {n:"Ragul T",y:"2016",r:"Founder / CEO",c:"HighOnSwift",city:"Chennai",m:"+917402156906",e:"ktsragul@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:"https://www.linkedin.com/in/ragul-kts/",web:"www.highonswift.com"},
+  {n:"S. Sivarajavel",y:"1998",r:"Founder & Director",c:"Smart Leaders IAS",city:"Chennai",m:"+919626252425",e:"ssivarajavel@gmail.com",cat:"Business Owner / Entrepreneur",met:true,li:"",web:"www.smartleadersias.com"},
+  {n:"Premanand",y:"1993",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"Pandiyarajan",y:"",r:"",c:"",city:"",m:"",e:"",cat:"",met:true,li:""},
+  {n:"KANNAN K R",y:"1996",r:"",c:"Raadha Chemicals",city:"Rajapalayam",m:"",e:"",cat:"",met:true,li:""},
+  // Non-attendees (85)
+  {n:"A.Ganesh",y:"1996",r:"",c:"BEML LTD",city:"Bangalore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"A.S. Karthikeyan",y:"1990",r:"",c:"Nouveaux Industries Pvt Ltd",city:"Tirupur",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Ammaiyappan Rajendran",y:"2008",r:"",c:"KAD Construction",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Amuthan Angappan",y:"1996",r:"",c:"BBSSL",city:"Bangalore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Amuthaselvan S",y:"1983",r:"",c:"Sri Andal Oil Agency (IOCL)",city:"Sriperumbudur",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Anbu Thomas Samuel",y:"1976",r:"",c:"PEMS Engineering Consultants Pvt Ltd",city:"Bangalore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Aranganathan S",y:"1996",r:"",c:"Aruve Engineering",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Aravind Selvapathy",y:"1999",r:"",c:"Pongalur Pioneer Textiles P Ltd",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Arumuga Perumal",y:"2009",r:"",c:"Amizhthini Oil Products",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Ayyanar Edadi",y:"2018",r:"",c:"Edadi Agrochem Pvt Ltd",city:"Madurai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Balamurugan Ramasamy",y:"1985",r:"Executive Vice President",c:"HCL Technologies",city:"Chennai",m:"+919840300842",e:"balamuruganrs@hcl.com",cat:"Senior Management",met:false,li:"",web:"hcltech.com"},
+  {n:"Balu G",y:"1996",r:"",c:"BEML Limited",city:"KGF",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Boopendran",y:"1996",r:"",c:"CGI IT Consulting Sdn Bhd",city:"Kuala Lumpur",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Denathayalan R",y:"2007",r:"",c:"Kalki Computing Solutions",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Dinesh Appavoo",y:"2009",r:"",c:"Bean Technology Inc",city:"Chennai & San Francisco",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Dr. M. Gnanasekaran",y:"1996",r:"",c:"Gnani's Voice Music Academy",city:"Erode",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Dr. J. Devi Shree",y:"1996",r:"",c:"CIT",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Dwarakanathan S",y:"1996",r:"",c:"Gainup Industries India Pvt Ltd",city:"Dindigul",m:"",e:"",cat:"",met:false,li:""},
+  {n:"G N Sivaramakrishna",y:"1985",r:"",c:"GNS Consultant",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Gajendiran S",y:"1990",r:"",c:"Chemplast Sanmar Limited",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Gopu",y:"1999",r:"",c:"Elait",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Gowtham K",y:"2016",r:"",c:"Sakthikanna Constructions Pvt Ltd",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Gowthaman Swarnam",y:"1996",r:"",c:"Tata Technologies Ltd",city:"Hosur",m:"",e:"",cat:"",met:false,li:""},
+  {n:"H. Vijayakumar",y:"1977",r:"",c:"Trumed Medical Devices Pvt Ltd",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Jawahar Harinarayanan",y:"1994",r:"",c:"ELGi Sauer Compressors Limited",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Jegan Arthanari",y:"1996",r:"",c:"Wind River",city:"Fremont, USA",m:"",e:"",cat:"",met:false,li:""},
+  {n:"K Vishnu",y:"2017",r:"",c:"CMK Flyash and Concrete Blocks",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Kavitha",y:"1999",r:"",c:"Ikomet Technologies",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Kumar N Senthil",y:"1993",r:"",c:"Firmly Inc",city:"Seattle, USA",m:"",e:"",cat:"",met:false,li:""},
+  {n:"M. Haridharan",y:"1993",r:"",c:"SFC Solutions India (Fluid) Pvt Ltd",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"M. Palani",y:"1988",r:"",c:"Perfect Engineering",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Madhukar",y:"2016",r:"",c:"Sidhu",city:"Salem",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Manoj Palanikumar",y:"2018",r:"",c:"TripleDart",city:"Bengaluru",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Mohan Kumar",y:"1996",r:"",c:"Unicarb Industrial Minerals",city:"Salem",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Muthukumar Arumugam",y:"1996",r:"",c:"Advent Designs Pvt Ltd",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"N. Selvamohan",y:"1986",r:"",c:"BG Investments",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Nagarajan Deivasigamani",y:"1996",r:"",c:"American Express",city:"Phoenix, USA",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Narayanamoorthy K",y:"1990",r:"",c:"Hitachi Digital Services",city:"Chennai/Bangalore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Nijesh Jayakar",y:"1999",r:"",c:"White Beard",city:"Padur, Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"P V Venkatachalam",y:"1977",r:"",c:"BSol Systems Pvt Ltd",city:"Bangalore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Padmavathy Balasubramanian",y:"2009",r:"",c:"SQL Professional",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Palanivelu S",y:"1984",r:"",c:"Jwala Auto Ancillarys",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Panneerselvam",y:"1984",r:"",c:"Malar Construction",city:"Trichy",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Parthasarathy K",y:"1999",r:"",c:"Ambal Indane Gas Service",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Periyadurai K",y:"1996",r:"",c:"Tamilnadu Government",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Prakash Govindaraj",y:"1996",r:"",c:"Smarter US",city:"Atlanta, USA",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Prakash S",y:"1998",r:"",c:"Salem City Municipal Corporation",city:"Salem",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Prem Poomaniraj",y:"1996",r:"",c:"Cognizant",city:"New Jersey, USA",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Ramakrishnan GR",y:"1979",r:"",c:"NITTTR Chennai",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Ramu Thiagadurai",y:"1996",r:"",c:"Accenture Ltd",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Ratheeskarthik V K",y:"1996",r:"",c:"RK Builders",city:"Gobichettipalayam",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Raviswaran N",y:"1993",r:"",c:"Godrej and Boyce Mfg Co Ltd",city:"Chennai",m:"",e:"",cat:"",met:false,li:""},
+  {n:"Rethinavelu Periyasamy",y:"1996",r:"",c:"Infosys Ltd",city:"Coimbatore",m:"",e:"",cat:"",met:false,li:""},
+  {n:"S M Vijayadeepan",y:"1999",r:"Founder & CEO",c:"Muthu Soft Labs Private Limited",city:"Chennai",m:"+919789898953",e:"deepan@mslabs.in",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"S. Selvi",y:"1999",r:"GM & HoD",c:"SAIL",city:"Ranchi",m:"+918986880320",e:"selvirakesh@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Sakthivel AKV",y:"1996",r:"Proprietor",c:"Burmakadai",city:"Virudhunagar",m:"+917667559999",e:"burmakadai@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Saravana Bhavan",y:"1996",r:"Sr Director",c:"Applied Materials",city:"Chennai",m:"+919444245832",e:"bhavansarav@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Sathishkumar",y:"1996",r:"CEO",c:"Saseepava Cars",city:"Coimbatore",m:"+918220797040",e:"nadhabindhu@yahoo.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sathiyanarayanan A",y:"1996",r:"Vice President",c:"Reliance Industries Limited",city:"Jamnagar",m:"+919833020205",e:"sathiya75@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Sharavana Kumar",y:"1999",r:"Partner",c:"PAS Petro Product",city:"Chennai",m:"+919444018095",e:"sharavanas@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Shriram Natarajan",y:"1996",r:"Partner",c:"ISG + Marutham Partners",city:"Milpitas, USA",m:"+14085688462",e:"Shriram.jobs@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Siva Balakrishnan",y:"1999",r:"CEO",c:"Vserve Ebusiness Solutions",city:"Coimbatore",m:"+919842221298",e:"SIVA@VSERVESOLUTION.COM",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sivaprasad M",y:"1999",r:"Partner",c:"CHANSS Industries",city:"Coimbatore",m:"+918861328747",e:"siva.ptj@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sudhakar Rajagopal",y:"1996",r:"Director",c:"Suvarrchit Renewable Energy Pvt Ltd",city:"Coimbatore",m:"+919486023715",e:"sudhakar.varun2012@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sujay Chandrahas",y:"1996",r:"Director",c:"Collabrah India Pvt Ltd",city:"Mumbai",m:"+919967049015",e:"sujaychandrahas@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sumithra Karuppaswamy",y:"2016",r:"Director",c:"Nalludai Apparels Pvt Ltd",city:"Kuala Lumpur",m:"+918217283975",e:"sumithrakaruppasamy@gmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Sunitha Lakshminarayanan",y:"1996",r:"CTO",c:"Melinta Therapeutics",city:"Scotch Plains, USA",m:"+13124899425",e:"sshirhattikar@yahoo.com",cat:"CXO (CTO / CFO / COO / CMO, etc.)",met:false,li:""},
+  {n:"Suresh KN",y:"1993",r:"Sr Manager Sales & Strategic Alliance",c:"Intelizest",city:"Coimbatore",m:"+918903470105",e:"Sureshkn41@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Suresh Ramakrishnan",y:"1996",r:"Process Engineer",c:"KNPC",city:"Kuwait",m:"+96566183064",e:"sureshr75@gmail.com",cat:"Junior Management",met:false,li:""},
+  {n:"Surya Murugan",y:"2009",r:"Managing Director",c:"ABI Industries Pvt Ltd",city:"Rajapalayam",m:"+919500207581",e:"suryamurugan@abiinduatriespvt.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Susindran Viswanathan",y:"1996",r:"Software Engineer",c:"Axiom Systems",city:"Frederick, Maryland, USA",m:"+13015249146",e:"Susindran@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Tamilazhagan V",y:"1996",r:"Project Manager",c:"Kauvery Hospital",city:"Perambalur",m:"+919842731033",e:"vtamilazhagan@yahoo.com",cat:"Senior Management",met:false,li:""},
+  {n:"Tharun Dhamodaran",y:"2017",r:"Technical Lead",c:"HCL Technologies",city:"Kuala Lumpur",m:"+919944118477",e:"tharund1403@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Udayakumar",y:"1988",r:"Civil Engineer – Maintenance",c:"Sri Ramakrishna Hospital",city:"Coimbatore",m:"+919843524959",e:"udayakumarkavitha63@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"V.R.V. Sriprasad",y:"1986",r:"Ex-MD, Volvo Buses",c:"Volvo Buses India Ltd (Resigned 2017)",city:"Chengalpattu, TN",m:"+919732475955",e:"sriprasadvrv@gmail.com",cat:"CEO",met:false,li:""},
+  {n:"Vairavanathan S",y:"1996",r:"Team Leader, Process Engineering",c:"ADNOC Gas",city:"Abu Dhabi",m:"+971509125806",e:"vairav24@gmail.com",cat:"Junior Management",met:false,li:""},
+  {n:"Vasu V",y:"1996",r:"Senior Facility Manager",c:"Emirates Environmental Protection Co.",city:"Dubai",m:"+971552059216",e:"vasunjc@gmail.com",cat:"Senior Management",met:false,li:""},
+  {n:"Venkat Srinivasan",y:"1994",r:"CEO",c:"Xmplified",city:"Bangalore",m:"+919740626996",e:"venkat@xmplified.com",cat:"CEO",met:false,li:""},
+  {n:"Venkatesan Rajagopal",y:"1996",r:"Chief Technology Officer",c:"JIT Global Infosystems",city:"Coimbatore",m:"+916385528531",e:"venky@jitglobal.net",cat:"CXO (CTO / CFO / COO / CMO, etc.)",met:false,li:""},
+  {n:"Venkatesh Prabhu Aniyarangan",y:"1996",r:"COO",c:"DataCaliper Pvt Ltd",city:"Bangalore",m:"+919980488044",e:"avprabhu@gmail.com",cat:"CXO (CTO / CFO / COO / CMO, etc.)",met:false,li:""},
+  {n:"Vetrivelrajan A",y:"1996",r:"Assistant Divisional Engineer",c:"TN Highways Department",city:"Madurai",m:"+919442607463",e:"vetrivelrajan6@gmail.com",cat:"",met:false,li:""},
+  {n:"Vijayaram Balasundaram",y:"1996",r:"Founder",c:"Synapse Robotics",city:"Coimbatore",m:"+919952417219",e:"bvijay65@hotmail.com",cat:"Business Owner / Entrepreneur",met:false,li:""},
+  {n:"Vivekanandan Shanmugam",y:"1999",r:"Project Manager",c:"Accenture",city:"Edison NJ, USA",m:"+918486660124",e:"shanviv@gmail.com",cat:"Senior Management",met:false,li:""},
+];
+
+// ═══════════════════════════════════════════════
+// AVATAR COLORS
+// ═══════════════════════════════════════════════
+const AV_COLORS=[
+  ['#1a1205','#c9a84c'],['#0d1a22','#38bdf8'],['#1a0d20','#a78bfa'],
+  ['#0d2018','#4ade80'],['#200d0d','#fb7185'],['#0d1a0d','#2dd4bf'],
+  ['#1a1a0d','#f0d080'],['#0d0d1a','#818cf8'],
+];
+function avColor(s){let h=0;for(let c of s)h=(h*31+c.charCodeAt(0))&0xfffffff;return AV_COLORS[h%AV_COLORS.length]}
+function initials(n){return n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'?'}
+function isChennai(c){return c.toLowerCase().includes('chennai')||c.toLowerCase().includes('tambaram')||c.toLowerCase().includes('padur')||c.toLowerCase().includes('sholinganallur')}
+function isGlobal(c){
+  const g=['usa','uk','dubai','uae','singapore','malaysia','kuwait','abu dhabi','germany','australia','indonesia','new jersey','atlanta','seattle','phoenix','milpitas','scotch plains','frederick','maryland','edison'];
+  return g.some(x=>c.toLowerCase().includes(x));
+}
+function isBangalore(c){return c.toLowerCase().includes('bangal')||c.toLowerCase().includes('bengal')||c.toLowerCase().includes('hosur')}
+function isCoimbatore(c){return c.toLowerCase().includes('coimbatore')||c.toLowerCase().includes('tirupur')||c.toLowerCase().includes('kangayam')}
+
+// ═══════════════════════════════════════════════
+// FILTER LOGIC
+// ═══════════════════════════════════════════════
+let currentFilter='all', searchQ='';
+
+function matchFilter(m){
+  const c=(m.city||'').toLowerCase();
+  const cat=(m.cat||'').toLowerCase();
+  if(currentFilter==='all') return true;
+  if(currentFilter==='met') return m.met;
+  if(currentFilter==='chennai') return isChennai(m.city);
+  if(currentFilter==='coimbatore') return isCoimbatore(m.city);
+  if(currentFilter==='bangalore') return isBangalore(m.city);
+  if(currentFilter==='global') return isGlobal(m.city);
+  if(currentFilter==='ceo') return cat.includes('ceo')||cat.includes('cxo');
+  if(currentFilter==='owner') return cat.includes('business owner');
+  if(currentFilter==='senior') return cat.includes('senior management');
+  if(currentFilter==='junior') return cat.includes('junior');
+  const yNum=parseInt(m.y);
+  if(currentFilter==='1960s') return yNum>=1960&&yNum<1970;
+  if(currentFilter==='1970s') return yNum>=1970&&yNum<1980;
+  if(currentFilter==='1980s') return yNum>=1980&&yNum<1990;
+  if(currentFilter==='1990s') return yNum>=1990&&yNum<2000;
+  if(currentFilter==='2000s') return yNum>=2000&&yNum<2010;
+  if(currentFilter==='2010s') return yNum>=2010;
+  return true;
+}
+
+function matchSearch(m){
+  if(!searchQ) return true;
+  const q=searchQ.toLowerCase();
+  return (m.n+m.c+m.city+m.r+m.cat+(m.web||'')).toLowerCase().includes(q);
+}
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
+function renderDir(){
+  const list=MEMBERS.filter(m=>matchFilter(m)&&matchSearch(m));
+  const el=document.getElementById('memberList');
+  const cnt=document.getElementById('dirCount');
+  cnt.textContent=list.length===MEMBERS.length?`${list.length} members`:`${list.length} of ${MEMBERS.length} members`;
+
+  if(!list.length){
+    el.innerHTML='<div class="empty"><div class="emo">🔍</div><p>No members found</p></div>';
+    return;
+  }
+
+  el.innerHTML=list.map((m,i)=>{
+    const [bg,fg]=avColor(m.n);
+    const hasDetail=m.c||m.r||m.e||m.m||m.web;
+    const isMet=m.met;
+    const badgeTxt=isMet?'Jan \'26 Meet':'';
+    const badgeBg=isMet?'rgba(201,168,76,.12)':'';
+    const badgeColor=isMet?'var(--gold)':'';
+    const json=JSON.stringify(m).replace(/"/g,'&quot;');
+    return `<div class="member-card ${isMet?'met':''} ${hasDetail?'':'no-detail'}" 
+      style="animation-delay:${Math.min(i*.02,.4)}s" onclick="openMember(${json})">
+      <div class="avatar" style="background:${bg};color:${fg}">${initials(m.n)}</div>
+      <div class="member-info">
+        <div class="mi-name">${m.n}</div>
+        <div class="mi-company">${m.c||m.r||'<span style="color:var(--muted);font-style:italic">CIT Alumni</span>'}</div>
+        <div class="mi-city">${m.city?'📍 '+m.city:m.y?'Batch: '+m.y:''}</div>
+      </div>
+      ${isMet?`<div class="member-badge" style="background:${badgeBg};color:${badgeColor}">✅ Met</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function filterDir(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('#dirFilters .fpill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  renderDir();
+  document.getElementById('scrollArea').scrollTop=0;
+}
+
+// ═══════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════
+function onSearch(v){
+  searchQ=v;
+  document.getElementById('searchClear').classList.toggle('show',v.length>0);
+  renderDir();
+  if(v&&document.getElementById('scr-dir').classList.contains('active')){
+    // already on dir
+  } else if(v) {
+    switchTab('dir');
+  }
+}
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  searchQ='';
+  document.getElementById('searchClear').classList.remove('show');
+  renderDir();
+}
+
+// ═══════════════════════════════════════════════
+// DETAIL OVERLAY
+// ═══════════════════════════════════════════════
+function openMember(m){
+  if(typeof m==='string') m=JSON.parse(m);
+  const [bg,fg]=avColor(m.n);
+  const hasCo = m.c&&m.c!==m.r;
+  const html=`
+    <div class="ov-top">
+      <div class="ov-avatar" style="background:${bg};color:${fg}">${initials(m.n)}</div>
+      <div style="flex:1;min-width:0">
+        <div class="ov-name">${m.n}</div>
+        ${m.r?`<div class="ov-role">${m.r}</div>`:''}
+        ${hasCo?`<div class="ov-company">${m.c}</div>`:''}
+      </div>
+    </div>
+    <div class="badge-row">
+      ${m.met?`<div class="obadge met">✅ Jan 2026 Meet</div>`:''}
+      ${m.city?`<div class="obadge city">📍 ${m.city}</div>`:''}
+      ${m.y?`<div class="obadge batch">Batch ${m.y}</div>`:''}
+      ${m.cat?`<div class="obadge cat">${m.cat.replace('Business Owner / Entrepreneur','Entrepreneur').replace('CXO (CTO / CFO / COO / CMO, etc.)','CXO')}</div>`:''}
+    </div>
+    ${(m.m||m.e||m.li)?`
+    <div style="margin-bottom:20px">
+      <div class="action-row">
+        ${m.m?`<div class="act-btn" onclick="window.location='tel:${m.m.replace(/\s/g,'')}';showToast('Calling '+this.dataset.n)" data-n="${m.m}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 1.11H6a2 2 0 0 1 2 1.72c.12.96.37 1.91.71 2.82a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.86.58 2.82.71A2 2 0 0 1 22 16.92z"/></svg>
+          <span>Call</span></div>`:''}
+        ${m.e?`<div class="act-btn" onclick="window.location='mailto:${m.e}'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>Email</span></div>`:''}
+        ${m.li&&m.li!='nan'?`<div class="act-btn" onclick="window.open('${m.li}','_blank');showToast('Opening LinkedIn profile')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <span>LinkedIn</span></div>`:''}
+        ${m.web?`<div class="act-btn" onclick="window.open('https://${m.web.replace('https://','').replace(/'/g,"\\'")}','_blank');showToast('Opening ${m.web.replace(/'/g,"\\'")}')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Website</span></div>`:''}
+      </div>
+    </div>`:''
+    }
+    <div class="ov-sec-title">Contact Details</div>
+    ${m.m?`<div class="ov-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 1.11H6a2 2 0 0 1 2 1.72c.12.96.37 1.91.71 2.82a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.86.58 2.82.71A2 2 0 0 1 22 16.92z"/></svg><span>${m.m}</span></div>`:`<div class="ov-row" style="color:var(--muted);font-style:italic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.1 1.11H6a2 2 0 0 1 2 1.72c.12.96.37 1.91.71 2.82a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.86.58 2.82.71A2 2 0 0 1 22 16.92z"/></svg><span>Not available</span></div>`}
+    ${m.e?`<div class="ov-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:${m.e}">${m.e}</a></div>`:''}
+    ${m.city?`<div class="ov-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>${m.city}</span></div>`:''}
+    ${m.li&&m.li!='nan'?`<div class="ov-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><a href="${m.li}" target="_blank">View LinkedIn Profile</a></div>`:''}
+    ${m.web?`<div class="ov-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><a href="https://${m.web.replace('https://','')}" target="_blank">${m.web}</a></div>`:''}
+  `;
+  document.getElementById('overlayContent').innerHTML=html;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function closeOverlay(){
+  const ov=document.getElementById('detailOverlay');
+  ov.style.animation='slideUp .25s cubic-bezier(.4,0,.2,1) reverse both';
+  setTimeout(()=>{ov.classList.remove('open');ov.style.animation=''},240);
+}
+
+// Swipe to close
+let _sy=0;
+document.getElementById('detailOverlay').addEventListener('touchstart',e=>{_sy=e.touches[0].clientY});
+document.getElementById('detailOverlay').addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-_sy>80)closeOverlay()});
+
+// ═══════════════════════════════════════════════
+// HOME — MEET CARDS
+// ═══════════════════════════════════════════════
+function buildMeetCards(){
+  const metWithData=MEMBERS.filter(m=>m.met&&(m.c||m.r)).slice(0,12);
+  const el=document.getElementById('recentMeetCards');
+  el.innerHTML=metWithData.map(m=>{
+    const json=JSON.stringify(m).replace(/"/g,'&quot;');
+    return `<div class="meet-card" onclick="openMember(${json})">
+      <div class="mc-batch">${m.y?'Batch '+m.y:'CIT Alumni'}</div>
+      <div class="mc-name">${m.n}</div>
+      <div class="mc-company">${m.r||''} ${m.c?'· '+m.c:''}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════
+function switchTab(tab){
+  ['home','dir','stats'].forEach(t=>{
+    document.getElementById('scr-'+t).classList.toggle('active',t===tab);
+    document.getElementById('nav-'+t).classList.toggle('active',t===tab);
+  });
+  document.getElementById('scrollArea').scrollTop=0;
+  if(tab==='dir') renderDir();
+}
+
+function goDir(filter){
+  switchTab('dir');
+  const pillMap={
+    'met':'✅ Jan Meet (84)','chennai':'📍 Chennai','coimbatore':'Coimbatore',
+    'bangalore':'Bangalore','global':'🌍 Global','ceo':'CEO/CXO',
+    'owner':'Founders','senior':'Senior Mgmt'
+  };
+  const pills=document.querySelectorAll('#dirFilters .fpill');
+  pills.forEach(p=>{
+    if(p.textContent.trim()===pillMap[filter]||p.textContent.trim()==='All (169)'){
+      if(p.textContent.trim()===pillMap[filter]){
+        currentFilter=filter;
+        pills.forEach(q=>q.classList.remove('on'));
+        p.classList.add('on');
+      }
+    }
+  });
+  currentFilter=filter;
+  renderDir();
+}
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)'},2500);
+}
+
+// ═══════════════════════════════════════════════
+// CLOCK
+// ═══════════════════════════════════════════════
+function tick(){
+  const d=new Date();
+  document.getElementById('clk').textContent=
+    String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+tick(); setInterval(tick,10000);
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+buildMeetCards();
+renderDir();
+</script>
+</body>
+</html>
